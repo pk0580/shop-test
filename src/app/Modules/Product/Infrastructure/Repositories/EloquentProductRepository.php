@@ -11,31 +11,13 @@ class EloquentProductRepository implements ProductRepositoryInterface
 {
     public function search(ProductSearchDto $dto): LengthAwarePaginator
     {
-        $query = Product::query();
-
-        if ($dto->q) {
-            $query->where('name', 'like', '%' . $dto->q . '%');
-        }
-
-        if ($dto->priceFrom !== null) {
-            $query->where('price', '>=', $dto->priceFrom);
-        }
-
-        if ($dto->priceTo !== null) {
-            $query->where('price', '<=', $dto->priceTo);
-        }
-
-        if ($dto->categoryId !== null) {
-            $query->where('category_id', $dto->categoryId);
-        }
-
-        if ($dto->inStock !== null) {
-            $query->where('in_stock', $dto->inStock);
-        }
-
-        if ($dto->ratingFrom !== null) {
-            $query->where('rating', '>=', $dto->ratingFrom);
-        }
+        $query = Product::query()
+            ->when($dto->q, fn($q) => $q->where('name', 'like', '%' . $dto->q . '%'))
+            ->when($dto->priceFrom !== null, fn($q) => $q->where('price', '>=', $dto->priceFrom))
+            ->when($dto->priceTo !== null, fn($q) => $q->where('price', '<=', $dto->priceTo))
+            ->when($dto->categoryId !== null, fn($q) => $q->where('category_id', $dto->categoryId))
+            ->when($dto->inStock !== null, fn($q) => $q->where('in_stock', $dto->inStock))
+            ->when($dto->ratingFrom !== null, fn($q) => $q->where('rating', '>=', $dto->ratingFrom));
 
         $query = $this->applySort($query, $dto->sort);
 
