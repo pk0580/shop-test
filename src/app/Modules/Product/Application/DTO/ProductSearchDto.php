@@ -2,17 +2,17 @@
 
 namespace App\Modules\Product\Application\DTO;
 
-class ProductSearchDto
+readonly class ProductSearchDto
 {
     public function __construct(
-        public readonly ?string $q = null,
-        public readonly ?float $priceFrom = null,
-        public readonly ?float $priceTo = null,
-        public readonly ?int $categoryId = null,
-        public readonly ?bool $inStock = null,
-        public readonly ?float $ratingFrom = null,
-        public readonly ?string $sort = 'newest',
-        public readonly int $page = 1,
-        public readonly int $perPage = 15,
+        public ?string $q = null,
+        public ?float  $priceFrom = null,
+        public ?float  $priceTo = null,
+        public ?int    $categoryId = null,
+        public ?bool   $inStock = null,
+        public ?float  $ratingFrom = null,
+        public ?string $sort = 'newest',
+        public int     $page = 1,
+        public int     $perPage = 15,
     ) {}
 }
